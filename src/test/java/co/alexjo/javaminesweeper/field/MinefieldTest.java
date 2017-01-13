@@ -71,9 +71,9 @@ public class MinefieldTest {
         mf = null;
         try {
             mf = new Minefield(1, 1, 0);
-            assertEquals(3, mf.getWidth());
-            assertEquals(5, mf.getHeight());
-            assertEquals(15, mf.getNumberOfMines());
+            assertEquals(1, mf.getWidth());
+            assertEquals(1, mf.getHeight());
+            assertEquals(0, mf.getNumberOfMines());
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -114,7 +114,7 @@ public class MinefieldTest {
      * Tests the getMines method
      */
     @Test
-    public void getMines () {
+    public void testGetMines () {
         Minefield mf = null;
         
         // Tests that it returns not null
@@ -148,8 +148,8 @@ public class MinefieldTest {
         mf = new Minefield(3, 3, 3);
         try {
             Square[] mines = mf.getMines();
-            for (int i = 0; i < mines.length; i++) {
-                assertTrue(mines[i] instanceof Square);
+            for (Square mine : mines) {
+                assertTrue(mine instanceof Square);
             }
         } catch (IllegalArgumentException e) {
             fail();
