@@ -51,6 +51,40 @@ public class Minefield {
     }
     
     /**
+     * Gets a specific square for a coordinate position.
+     * @param x The x coordinate of the square
+     * @param y The y coordinate of the square
+     * @return the square for the coordinates given
+     * @throws IllegalArgumentException if the x or y coordinate in out of 
+     *      bounds of the field.
+     */
+    public Square getSquare (int x, int y) {
+        if (x < 0 || x >= getWidth()) {
+            throw new IllegalArgumentException();
+        }
+        
+        if (y < 0 || y >= getHeight()) {
+            throw new IllegalArgumentException();
+        }
+        
+        return board[x][y];
+    }
+    
+    /**
+     * Safely gets a specific square for a coordinate position.
+     * @param x The x coordinate of the square
+     * @param y The y coordinate of the square
+     * @return the square for the coordinates given
+     */
+    private Square safeGetSquare (int x, int y) {
+        try {
+            return getSquare(x, y);
+        } catch (IllegalArgumentException e) {
+            return new Square(0, 0, false);
+        }
+    }
+    
+    /**
      * Manually gets and updates the state of the field. -1 for exploded, 
      * 0 for in-play and 1 for cleared.
      * @return the state of the field.
@@ -127,7 +161,7 @@ public class Minefield {
        
         
         // given chance of mine in square
-        int chanceOfMine = numberOfMines / area;
+        double chanceOfMine = (double)numberOfMines / area;
         int minesPlaced = 0;
         board = new Square[width][height];
         mines = new Square[numberOfMines];
@@ -135,9 +169,7 @@ public class Minefield {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 Square s = null;
-                if ((chanceOfMine < Math.random() || 
-                        area - ((i + 1) * width + j) < numberOfMines - minesPlaced) &&
-                        numberOfMines > minesPlaced) {
+                if (Math.random() < chanceOfMine && numberOfMines > minesPlaced) {
                     s = new Square(i, j, true);
                     mines[minesPlaced] = s;
                     minesPlaced++;
@@ -147,6 +179,23 @@ public class Minefield {
                 board[i][j] = s;
             } // for j
         } // for i
+        
+        //sets adjacent mines
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                int adjacentMines = 0;
+                if (safeGetSquare(i - 1, j - 1).isMine()) {adjacentMines++;}
+                if (safeGetSquare(i    , j - 1).isMine()) {adjacentMines++;}
+                if (safeGetSquare(i + 1, j - 1).isMine()) {adjacentMines++;}
+                if (safeGetSquare(i - 1, j    ).isMine()) {adjacentMines++;}
+                if (safeGetSquare(i    , j    ).isMine()) {adjacentMines++;}
+                if (safeGetSquare(i + 1, j    ).isMine()) {adjacentMines++;}
+                if (safeGetSquare(i - 1, j + 1).isMine()) {adjacentMines++;}
+                if (safeGetSquare(i    , j + 1).isMine()) {adjacentMines++;}
+                if (safeGetSquare(i + 1, j + 1).isMine()) {adjacentMines++;}
+                getSquare(i, j).setAdjacentMines(adjacentMines);
+            }
+        }
     }
     
     /**

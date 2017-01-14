@@ -1,7 +1,6 @@
 package co.alexjo.javaminesweeper.graphics;
 
 import co.alexjo.javaminesweeper.field.Minefield;
-import co.alexjo.javaminesweeper.field.graphics.MineSweeperGraphics;
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import static org.junit.Assert.*;
@@ -26,7 +25,7 @@ public class MineSweeperGraphicsTest {
         // Tests the construction with null
         g = null;
         try {
-            g = new MineSweeperGraphics(null);
+            g = new MineSweeperGraphics(null, null);
             fail();
         } catch (Exception e) {
             assertNull(g);
@@ -35,7 +34,7 @@ public class MineSweeperGraphicsTest {
         // Tests the default construction with invalid file path
         g = null;
         try {
-            g = new MineSweeperGraphics("notsprites.png");
+            g = new MineSweeperGraphics("notsprites.png", null);
             fail();
         } catch (Exception e) {
             assertNull(g);
@@ -44,7 +43,7 @@ public class MineSweeperGraphicsTest {
         // Tests the default construction with invalid file path
         g = null;
         try {
-            g = new MineSweeperGraphics("minesprites.png");
+            g = new MineSweeperGraphics("minesprites.png", null);
             fail();
         } catch (Exception e) {
             assertNull(g);
@@ -59,20 +58,23 @@ public class MineSweeperGraphicsTest {
     public void testRepaint () {
         MineSweeperGraphics g = null;
         Minefield mf = null;
+        JFrame frame = null;
         
         // Tests the repaint method with null mf
-        g = new MineSweeperGraphics(SPRITE_SHEET);
+        g = new MineSweeperGraphics(SPRITE_SHEET, null);
+        frame = new JFrame("Psuedo frame");
         try {
-            g.repaint(null);
+            g.repaint(null, frame);
         } catch (IllegalArgumentException e) {
             fail();
         }
         
         // Tests the repaint method with valid mf
-        g = new MineSweeperGraphics(SPRITE_SHEET);
+        g = new MineSweeperGraphics(SPRITE_SHEET, null);
         mf = new Minefield(1, 1, 1);
+        frame = new JFrame("Psuedo frame");
         try {
-            g.repaint(mf);
+            g.repaint(mf, frame);
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -104,7 +106,7 @@ public class MineSweeperGraphicsTest {
         Minefield mf = null;
         
         // Tests getDisplay before painting
-        g = new MineSweeperGraphics(SPRITE_SHEET);
+        g = new MineSweeperGraphics(SPRITE_SHEET, null);
         try {
             
         } catch (Exception e) {
