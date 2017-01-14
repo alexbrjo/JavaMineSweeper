@@ -105,10 +105,16 @@ public class MineSweeper implements MouseListener, Runnable{
     public void mouseClicked(MouseEvent e) {}
 
     @Override
-    public void mousePressed(MouseEvent e) {}
+    public void mousePressed(MouseEvent e) {
+        e.translatePoint(0, - TITLE_BAR_SIZE);
+        minefield.click((e.getX() - (e.getX() % 16)) / 16, 
+                (e.getY() - (e.getY() % 16)) / 16);
+    }
 
     @Override
-    public void mouseReleased(MouseEvent e) {}
+    public void mouseReleased(MouseEvent e) {
+        
+    }
 
     @Override
     public void mouseEntered(MouseEvent e) {}

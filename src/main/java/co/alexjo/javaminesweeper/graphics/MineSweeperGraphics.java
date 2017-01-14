@@ -79,10 +79,14 @@ public class MineSweeperGraphics {
         for (int i = 0; i < mf.getWidth(); i++) {
             for (int j = 0; j < mf.getHeight(); j++) {
                 Square s = mf.getSquare(i, j);
-                if (s.isMine()) {
-                    image.drawImage(sprite.getMine(), i * 16, j * 16, io);
+                if (s.isCleared()) {
+                    if (s.isMine()) {
+                        image.drawImage(sprite.getMine(), i * 16, j * 16, io);
+                    } else {
+                        image.drawImage(sprite.getClearBlock(s.getAdjacentMines()), i * 16, j * 16, io);
+                    }
                 } else {
-                    image.drawImage(sprite.getClearBlock(s.getAdjacentMines()), i * 16, j * 16, io);
+                    image.drawImage(sprite.getBlock(), i * 16, j * 16, io);
                 }
             }
         }

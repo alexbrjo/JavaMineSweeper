@@ -80,7 +80,7 @@ public class Minefield {
         try {
             return getSquare(x, y);
         } catch (IllegalArgumentException e) {
-            return new Square(0, 0, false);
+            return new Square(width, height, false);
         }
     }
     
@@ -123,8 +123,39 @@ public class Minefield {
             throw new IllegalArgumentException("Out of bounds");
         }
         
-        if (board[x][y].click() == -1) {
+        int res = board[x][y].click();
+        if (res == -1) {
             exploded = true;
+        } else if (res == 1) {
+            if (board[x][y].getAdjacentMines() == 0) {
+               clearAdjancentSquares(x, y);
+            }
+        }
+    }
+    
+    private void clearAdjancentSquares (int i, int j) {
+        
+        if (i >= width || j >= height) {
+            return;
+        }
+        
+        Square s = safeGetSquare(i, j);
+        if (!s.isMine() && safeGetSquare(i, j).getAdjacentMines() > 0) {
+            s.click();
+            return;
+        }
+        
+        if (!safeGetSquare(i, j - 1).isMine() && j > 0) {
+            click(i, j - 1);
+        }
+        if (!safeGetSquare(i - 1, j).isMine() && i > 0) {
+            click(i - 1, j);
+        }
+        if (!safeGetSquare(i + 1, j).isMine() && i < width - 1) {
+            click(i + 1 ,j    );
+        }
+        if (!safeGetSquare(i, j + 1).isMine() && j < height - 1) {
+            click(i, j + 1);
         }
     }
     
