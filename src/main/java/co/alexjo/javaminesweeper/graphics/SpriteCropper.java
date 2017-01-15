@@ -42,16 +42,16 @@ public class SpriteCropper {
     private BufferedImage detonatedMine;
     
     /** The covered block sprite */
-    private BufferedImage block;
+    private BufferedImage[] block;
     
     private final int t = BufferedImage.TYPE_INT_ARGB;
     
     /**
      * Constructs a new sprite sheet
      * @param spriteSheet The image File of the spriteSheet
-     * @param f The JFrame for image observer
      */
-    public SpriteCropper (File sheetImage, JFrame f) {
+    public SpriteCropper (File sheetImage) {
+        
         try {
             spriteSheet = ImageIO.read(sheetImage) ;
         } catch (IOException ex) {
@@ -73,13 +73,16 @@ public class SpriteCropper {
             face[i] = makeSprite(i * 26, 55, 26, 26);
         }
         
+        block = new BufferedImage[3];
+        for (int i = 0; i < block.length; i++) {
+            block[i] = makeSprite(i * SPRITE_WIDTH + 48, 16);
+        }
+        
         mine = makeSprite(0, 16);
         
         wrongMine = makeSprite(16, 16);
     
         detonatedMine = makeSprite(32, 16);
-        
-        block = makeSprite(48, 16);
         
     }
     
@@ -100,6 +103,18 @@ public class SpriteCropper {
         sprite.getGraphics().drawImage(spriteSheet, 0, 0, w, h, x, y, 
                 x + w, y + h, null);
         return sprite;
+    }
+    
+    /**
+     * Gets the sprite of a face.
+     * @return the sprite of a face
+     * @throws IllegalArgumentException if the number of adjacentMine is invalid
+     */
+    public BufferedImage getFace (int index) {
+        if (index < 0 || index >= face.length) {
+            throw new IllegalArgumentException();
+        }
+        return face[index];
     }
     
     /**
@@ -168,6 +183,15 @@ public class SpriteCropper {
      * @return image of covered block
      */
     public BufferedImage getBlock () {
-        return block;
+        return getBlock(0);
+    }
+    
+    /**
+     * Gets the image of a covered block that has been flagged or has a 
+     * question mark;
+     * @return image of covered block
+     */
+    public BufferedImage getBlock (int n) {
+        return block[n];
     }
 }

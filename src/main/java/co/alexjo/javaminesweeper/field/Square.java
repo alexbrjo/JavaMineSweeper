@@ -22,6 +22,9 @@ public class Square {
     /** Whether the square has been cleared */
     private boolean cleared = false;
     
+    /** Whether the square has been flagged */
+    private boolean flagged = false;
+    
     /**
      * Creates a new Square for a x and y position and whether or not it 
      * contains an incredibly dangerous mine.
@@ -41,11 +44,29 @@ public class Square {
      * @return whether the square exploded -1, nothing 0, cleared or 1
      */
     public int click () {
+        return click(false);
+    }
+    
+    /**
+     * Clicks the square. Returns whether the square exploded -1, nothing 0, 
+     * or cleared 1.
+     * @param right Whether the mouse click was the right mouse button
+     * @return whether the square exploded -1, nothing 0, cleared or 1
+     */
+    public int click (boolean right) {
         if (cleared) {
             return 0;
+        } 
+        
+        if (right) {
+            flagged = !flagged;
+            return 0;
+        } else if (!flagged) {
+            cleared = true;
+            return mine ? -1 : 1;
         }
-        cleared = true;
-        return mine ? -1 : 1;
+        
+        return 0;
     }
     
     /**
@@ -136,5 +157,13 @@ public class Square {
             throw new IllegalArgumentException();
         }
         this.adjacentMines = adjacentMines;
+    }
+
+    /**
+     * If the square is flagged.
+     * @return if the square is flagged
+     */
+    public boolean isFlagged() {
+        return flagged;
     }
 }

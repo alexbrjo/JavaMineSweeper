@@ -4,8 +4,6 @@ import co.alexjo.javaminesweeper.field.Minefield;
 import co.alexjo.javaminesweeper.graphics.MineSweeperGraphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 /**
@@ -32,7 +30,7 @@ public class MineSweeper implements MouseListener, Runnable{
     public int FRAME_HEIGHT = 600;
     
     /** The height of the title bar */
-    public final int TITLE_BAR_SIZE = 22;
+    public final int TITLE_BAR_SIZE = 72;
     
     /** The MineSweeper JFrame */
     private JFrame frame;
@@ -51,7 +49,7 @@ public class MineSweeper implements MouseListener, Runnable{
      * @param args The arguments from the command line
      */
     public static void main(String[] args) {
-        MineSweeper game = new MineSweeper(20, 20, 30);
+        MineSweeper game = new MineSweeper(30, 30, 30 * 30 / 2);
     }
     
     /**
@@ -67,7 +65,7 @@ public class MineSweeper implements MouseListener, Runnable{
         frame.addMouseListener(this);
 		
 	minefield = new Minefield(width, height, mines);
-        graphics = new MineSweeperGraphics("minesprites.png", frame);
+        graphics = new MineSweeperGraphics("minesprites.png");
         
         loop = new Thread(this);
         loop.start();
@@ -78,13 +76,18 @@ public class MineSweeper implements MouseListener, Runnable{
      */
     @Override
     public void run() {
-        boolean running = true; 
+        boolean running = true;
+        
+        // paints the initial game field
+        graphics.paintMinefield(minefield, frame);
+        graphics.repaint(minefield, frame);
+        
         while (running) {
             
             graphics.repaint(minefield, frame);
             
             try {
-                Thread.sleep(400);
+                Thread.sleep(25);
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
                 return;
@@ -108,12 +111,15 @@ public class MineSweeper implements MouseListener, Runnable{
     public void mousePressed(MouseEvent e) {
         e.translatePoint(0, - TITLE_BAR_SIZE);
         minefield.click((e.getX() - (e.getX() % 16)) / 16, 
-                (e.getY() - (e.getY() % 16)) / 16);
+                (e.getY() - (e.getY() % 16)) / 16, e.getButton());
+        graphics.paintMinefield(minefield, frame);
+        graphics.repaint(minefield, frame);
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        
+        graphics.paintMinefield(minefield, frame);
+        graphics.repaint(minefield, frame);
     }
 
     @Override

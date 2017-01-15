@@ -307,4 +307,40 @@ public class MinefieldTest {
         }
     }
     
+    /**
+     * Test the getTime method, of class Minefield
+     */
+    @Test
+    public void testGetTime () {
+        Minefield mf = new Minefield(1, 1, 0);
+        
+        // Tests getTime immediatly
+        try {
+            int[] a = mf.getTime();
+            assertEquals(3, a.length);
+            assertTrue(a[0] < 10);
+            assertTrue(a[1] < 10);
+            assertTrue(a[2] < 10);
+            // no combo of array numbers should be greater than 99
+            assertTrue(a[1] * 10 + a[0] <= 99);
+            assertTrue(a[2] * 10 + a[0] <= 99);
+            assertTrue(a[2] * 10 + a[1] <= 99);
+            // no combo of array numbers
+            assertTrue(a[0] * 100 + a[1] * 10 + a[2] <= 999);
+        } catch (Exception e) {
+            fail();
+        }
+        
+        // Tests getTime after a few more nano-seconds
+        try {
+            int[] a = mf.getTime();
+            assertTrue(a.length == 3);
+            assertTrue(a[0] < 10);
+            assertTrue(a[1] < 10);
+            assertTrue(a[2] < 10);
+        } catch (Exception e) {
+            fail();
+        }
+    }
+    
 }
