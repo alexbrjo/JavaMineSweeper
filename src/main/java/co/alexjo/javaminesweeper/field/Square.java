@@ -41,32 +41,41 @@ public class Square {
     /**
      * Clicks the square. Returns whether the square exploded -1, nothing 0, 
      * or cleared 1.
-     * @return whether the square exploded -1, nothing 0, cleared or 1
-     */
-    public int click () {
-        return click(false);
-    }
-    
-    /**
-     * Clicks the square. Returns whether the square exploded -1, nothing 0, 
-     * or cleared 1.
      * @param right Whether the mouse click was the right mouse button
      * @return whether the square exploded -1, nothing 0, cleared or 1
      */
-    public int click (boolean right) {
+    public int click () {
         if (cleared) {
             return 0;
         } 
         
-        if (right) {
-            flagged = !flagged;
-            return 0;
-        } else if (!flagged) {
+        if (!flagged) {
             cleared = true;
             return mine ? -1 : 1;
         }
         
         return 0;
+    }
+    
+    /** 
+     * Sets flagged to true
+     */
+    public void addFlag () {
+        flagged = true;
+    }
+    
+    /** 
+     * Sets flagged to false
+     */
+    public void removeFlag () {
+        flagged = false;
+    }
+    
+    /**
+     * Toggles the flagged boolean
+     */
+    public void toggleFlag () {
+        flagged = !flagged;
     }
     
     /**

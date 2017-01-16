@@ -30,8 +30,17 @@ public class Minefield {
     /** The creation of the minefield */
     private long startTime;
     
-    /** Result if end game has been reached  */
-    private Boolean end;
+    /** The end time of win or lose  */
+    private int finalTime;
+    
+    /** If the minefield has exploded */
+    private boolean explode;
+    
+    /** If mouse is down on face button */
+    private boolean faceButton;
+    
+    /** If the mouse is down on the mine field*/
+    private boolean mouseDown;
     
     /**
      * Creates a minefield for a width, height and number of mines.
@@ -43,7 +52,8 @@ public class Minefield {
         setSize(width, height);
         generateField(numberOfMines);
         startTime = System.currentTimeMillis();
-        end = false;
+        finalTime = 0;
+        explode = false;
     }
     
     /**
@@ -110,23 +120,48 @@ public class Minefield {
     }
     
     /**
-     * Clicks a specific square. 
+     * Clears a specific square. 
      * @param x The x of the square to click
      * @param y The y of the square to click
      * @throws IllegalArgumentException if the x or y is outside the bounds
      */
-    public void click (int x, int y) {
-        click(x, y, 0);
+    public void clearSquare (int x, int y) {
+        int res = board[x][y].click();
+        if (res == -1) {
+            for (int i = 0; i < width; i++) {
+                for (int j = 0; j < height; j++) {
+                    board[i][j].click();
+                }
+            }
+            finalTime = getTime();
+            explode = true;
+        } else if (res == 1) {
+            if (board[x][y].getAdjacentMines() == 0) {
+               clearAdjancentSquares(x, y);
+            }
+
+            // If the board is clear end the game and flag remainding mines
+            if (isClear()) { 
+                finalTime = getTime();
+                for (int i = 0; i < width; i++) {
+                    for (int j = 0; j < height; j++) {
+                        board[i][j].addFlag();
+                    }
+                }
+            }
+        }
     }
     
     /**
-     * Clicks a specific square for left or right click.
+     * Clicks the minefield.
      * @param x The x of the square to click
      * @param y The y of the square to click
      * @param b The button pressed
+     * @param pressed If the mouse was pressed
+     * @param released If the mouse was released
      * @throws IllegalArgumentException if the x or y is outside the bounds
      */
-    public void click (int x, int y, int b) {
+    public void click (int x, int y, int b, boolean pressed, boolean released) {
         
         if (x < 0 || x > width - 1) {
             throw new IllegalArgumentException("Out of bounds");
@@ -136,28 +171,23 @@ public class Minefield {
             throw new IllegalArgumentException("Out of bounds");
         }
         
-        if (b == 3) {
-            board[x][y].click(true);
-            return;
-        }
+        mouseDown = b != 0;
         
-        int res = board[x][y].click();
-        if (res == -1) {
-            for (int i = 0; i < width; i++) {
-                for (int j = 0; j < height; j++) {
-                    board[i][j].click();
-                    end = false;
+        if (finalTime == 0) {
+            if (b == 1 && released && mouseDown) {
+                clearSquare(x, y);
+            } else if (b == 3 && pressed) { // if it's a right click toggle flag
+                if (!board[x][y].isCleared()) {
+                    board[x][y].toggleFlag();
                 }
-            }
-        } else if (res == 1) {
-            if (board[x][y].getAdjacentMines() == 0) {
-               clearAdjancentSquares(x, y);
-            }
-        }
+            } 
+        } 
     }
     
     /**
-     * Clears adjacent squares for an x and y coordinate.
+     * Clears cardinally adjacent squares for an x and y coordinate. This 
+     * function is recursive, if an adjacent square is also a blank square it 
+     * will call clearsAdjacentSquares on it's position.
      * @param i X coordinate to clear from
      * @param j Y coordinate to clear from
      */
@@ -174,25 +204,33 @@ public class Minefield {
         }
         
         if (!safeGetSquare(i, j - 1).isMine() && j > 0) {
-            click(i, j - 1);
+            clearSquare(i, j - 1);
         }
         if (!safeGetSquare(i - 1, j).isMine() && i > 0) {
-            click(i - 1, j);
+            clearSquare(i - 1, j);
         }
         if (!safeGetSquare(i + 1, j).isMine() && i < width - 1) {
-            click(i + 1 ,j    );
+            clearSquare(i + 1 ,j    );
         }
         if (!safeGetSquare(i, j + 1).isMine() && j < height - 1) {
-            click(i, j + 1);
+            clearSquare(i, j + 1);
         }
     }
     
     /**
-     * Gets the number of mines.
-     * @return the number of mines on the field
+     * If the Minefield is clear.
+     * @return if the Minefield has been cleared or not
      */
-    public int getNumberOfMines () {
-        return numberOfMines;
+    public boolean isClear () {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                Square s = board[i][j];
+                if (!s.isMine() && !s.isCleared()) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
     
     /**
@@ -257,21 +295,47 @@ public class Minefield {
     }
     
     /**
-     * The time since creation of the battlefield.
+     * The time since creation of the battlefield. Stops when the game is won.
      * @return The time since creation of the battlefield
      */
-    public int[] getTime () {
+    public int getTime () {
+        if (finalTime > 0) { 
+            return finalTime;
+        }
         long milli_system_time = System.currentTimeMillis() - startTime;
         int milli_time = (int) ( milli_system_time % Integer.MAX_VALUE );
-        return smallIntToArray(milli_time / 1000);
+        return milli_time / 1000;
+    }
+    
+    /**
+     * The time since creation of the battlefield digitized into an array of
+     * it's digits.
+     * @return The time since creation of the battlefield
+     */
+    public int[] getTimeDigitized () {
+        return smallIntToArray(getTime());
+    }
+    
+    /**
+     * Gets the number of mines.
+     * @return the number of mines on the field
+     */
+    public int getNumberOfMines () {
+        int flags = 0;
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (board[i][j].isFlagged()) {flags++;}
+            }
+        }
+        return mines.length - flags;
     }
     
     /**
      * Gets the number of mines formatted into an array.
      * @return an array of digits of the number of mines
      */
-    public int[] getNumberOfMinesFormatted () {
-        return smallIntToArray(mines.length);
+    public int[] getNumberOfMinesDigitized () {
+        return smallIntToArray(getNumberOfMines());
     }
     
     /**
@@ -281,8 +345,17 @@ public class Minefield {
      * @return the index of the current face
      */
     public int getFace () {
-        
-        return 1;
+        if (explode) {
+            return 3; // if exploded return 3 for lose
+        } else if (finalTime > 0) {
+           return 4;
+        } else if (faceButton) {
+            return 0;
+        } else if (mouseDown) {
+            return 2;
+        } else { // If game state is normal print normal face
+            return 1;
+        }
     }
     
     /**
@@ -341,5 +414,20 @@ public class Minefield {
         
         this.width = width;
         this.height = height;
+    }
+    
+    /**
+     * Sets if the face button is being pressed
+     */
+    public void setButton (boolean down) {
+        faceButton = down;
+    }
+    
+    /**
+     * If the face button is down.
+     * @return If the face button is down
+     */
+    public boolean button () {
+        return faceButton;
     }
 }

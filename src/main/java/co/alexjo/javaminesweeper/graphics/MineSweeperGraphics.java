@@ -50,13 +50,13 @@ public class MineSweeperGraphics {
         
         // Draws the display face
         int face = mf.getFace();
-        g.drawImage(sprite.getFace(1), mf.getWidth() * 16 / 2 - sprite.getFace(1).getWidth() / 2, 
+        g.drawImage(sprite.getFace(face), mf.getWidth() * 16 / 2 - sprite.getFace(1).getWidth() / 2, 
                 34, frame);
         
         /*
           Prints the number of mines display in the upper left corner
         */
-        int[] num = mf.getNumberOfMinesFormatted();
+        int[] num = mf.getNumberOfMinesDigitized();
         for (int i = 1; i < 4; i++) {
             g.drawImage(sprite.getNumber(num[i - 1]), 13 * i, 34, frame);
         }
@@ -64,7 +64,7 @@ public class MineSweeperGraphics {
         /*
            Prints the second timer in the upper right corner
          */
-        int[] time = mf.getTime();
+        int[] time = mf.getTimeDigitized();
         for (int i = 4; i > 1; i--) {
             g.drawImage(sprite.getNumber(time[4 - i]), mf.getWidth() * 16 - 13 * i, 34, frame);
         }
