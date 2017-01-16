@@ -25,6 +25,9 @@ public class Square {
     /** Whether the square has been flagged */
     private boolean flagged = false;
     
+    /** Whether the square was the source of the explosion */
+    private boolean exploded;
+    
     /**
      * Creates a new Square for a x and y position and whether or not it 
      * contains an incredibly dangerous mine.
@@ -174,5 +177,29 @@ public class Square {
      */
     public boolean isFlagged() {
         return flagged;
+    }
+    
+    /**
+     * If the square was the source of the explosion
+     * @return if the square has exploded and always false if it's not a mine
+     */
+    public boolean hasExploded () {
+        if (isMine()) {
+            return exploded;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * Detonates the Square if it is a mine.
+     * @throws IllegalArgumentException if the square is not a mine
+     */
+    public void explode () {
+        if (isMine()) {
+            exploded = true;
+        } else {
+            throw new IllegalArgumentException("Not a mine");
+        }
     }
 }

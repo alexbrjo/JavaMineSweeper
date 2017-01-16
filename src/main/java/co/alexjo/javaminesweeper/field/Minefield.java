@@ -134,6 +134,7 @@ public class Minefield {
                 }
             }
             finalTime = getTime();
+            board[x][y].explode(); // sets the square as the origin of the explosion
             explode = true;
         } else if (res == 1) {
             if (board[x][y].getAdjacentMines() == 0) {
@@ -231,6 +232,14 @@ public class Minefield {
             }
         }
         return true;
+    }
+    
+    /**
+     * If the Minefield has exploded
+     * @return If the Minefield has exploded or not
+     */
+    public boolean isExploded () {
+        return this.explode;
     }
     
     /**

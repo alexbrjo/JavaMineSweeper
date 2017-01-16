@@ -48,12 +48,14 @@ public class SpriteCropper {
     
     /**
      * Constructs a new sprite sheet
-     * @param spriteSheet The image File of the spriteSheet
+     * @param sheetImagePath The image path of the spriteSheet
      */
-    public SpriteCropper (File sheetImage) {
+    public SpriteCropper (String sheetImagePath) {
+        
+        File sheet = new File(getClass().getClassLoader().getResource(sheetImagePath).getFile());
         
         try {
-            spriteSheet = ImageIO.read(sheetImage) ;
+            spriteSheet = ImageIO.read(sheet) ;
         } catch (IOException ex) {
             throw new IllegalArgumentException("File must exist");
         }
@@ -107,6 +109,7 @@ public class SpriteCropper {
     
     /**
      * Gets the sprite of a face.
+     * @param index The index of the face sprite in the face array
      * @return the sprite of a face
      * @throws IllegalArgumentException if the number of adjacentMine is invalid
      */
@@ -192,6 +195,9 @@ public class SpriteCropper {
      * @return image of covered block
      */
     public BufferedImage getBlock (int n) {
+        if (n < 0 || n >= block.length) {
+            throw new IllegalArgumentException();
+        }
         return block[n];
     }
 }

@@ -32,8 +32,7 @@ public class MineSweeperGraphics {
             throw new IllegalArgumentException();
         }
         
-        File spriteSheet = new File(getClass().getClassLoader().getResource(spriteSheetPath).getFile());
-        sprite = new SpriteCropper(spriteSheet);
+        sprite = new SpriteCropper(spriteSheetPath);
         
     }
     
@@ -75,8 +74,8 @@ public class MineSweeperGraphics {
      * @param mf 
      * @param io 
      */
-    public void paintMinefield (Minefield mf, ImageObserver io) {
-        if (mf == null || io == null) {
+    public void paintMinefield (Minefield mf) {
+        if (mf == null) {
             throw new IllegalArgumentException();
         }
         int w = 16 * mf.getWidth();
@@ -86,17 +85,23 @@ public class MineSweeperGraphics {
         for (int i = 0; i < mf.getWidth(); i++) {
             for (int j = 0; j < mf.getHeight(); j++) {
                 Square s = mf.getSquare(i, j);
+                BufferedImage squareSprite = sprite.getBlock();
                 if (s.isCleared()) {
                     if (s.isMine()) {
-                        image.drawImage(sprite.getMine(), i * 16, j * 16, null);
+                        squareSprite = sprite.getMine();
+                        if (s.hasExploded()) {
+                            squareSprite = sprite.getMine(2);
+                        }
                     } else {
-                        image.drawImage(sprite.getClearBlock(s.getAdjacentMines()), i * 16, j * 16, null);
+                        squareSprite = sprite.getClearBlock(s.getAdjacentMines());
                     }
                 } else if (s.isFlagged()) {
-                    image.drawImage(sprite.getBlock(2), i * 16, j * 16, null);
-                } else {
-                    image.drawImage(sprite.getBlock(), i * 16, j * 16, null);
+                    squareSprite = sprite.getBlock(2);
+                    if (mf.isExploded() && !s.isMine()) {
+                        squareSprite = sprite.getMine(1);
+                    }
                 }
+                image.drawImage(squareSprite, i * 16, j * 16, null);
             }
         }
     }

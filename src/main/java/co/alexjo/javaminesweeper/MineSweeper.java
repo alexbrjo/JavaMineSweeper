@@ -112,7 +112,7 @@ public class MineSweeper implements MouseListener, MouseMotionListener, Runnable
         boolean running = true;
         
         // paints the initial game field
-        graphics.paintMinefield(minefield, frame);
+        graphics.paintMinefield(minefield);
         graphics.repaint(minefield, frame);
         
         while (running) {
@@ -163,7 +163,7 @@ public class MineSweeper implements MouseListener, MouseMotionListener, Runnable
     public void mousePressed(MouseEvent e) {
         mouseUpdate(e.getX(), e.getY(), e.getButton(), true, false);
         
-        graphics.paintMinefield(minefield, frame);
+        graphics.paintMinefield(minefield);
         graphics.repaint(minefield, frame);
     }
 
@@ -171,7 +171,7 @@ public class MineSweeper implements MouseListener, MouseMotionListener, Runnable
     public void mouseReleased(MouseEvent e) {
         mouseUpdate(e.getX(), e.getY(), e.getButton(), false, true);
         
-        graphics.paintMinefield(minefield, frame);
+        graphics.paintMinefield(minefield);
         graphics.repaint(minefield, frame);
     }
     
@@ -179,7 +179,7 @@ public class MineSweeper implements MouseListener, MouseMotionListener, Runnable
     public void mouseMoved(MouseEvent e) {
         mouseUpdate(e.getX(), e.getY(), e.getButton(), false, false);
         
-        graphics.paintMinefield(minefield, frame);
+        graphics.paintMinefield(minefield);
         graphics.repaint(minefield, frame);
     }
 
