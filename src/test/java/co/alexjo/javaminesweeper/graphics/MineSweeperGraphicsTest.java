@@ -25,7 +25,7 @@ public class MineSweeperGraphicsTest {
         // Tests the construction with null
         g = null;
         try {
-            g = new MineSweeperGraphics(null, null);
+            g = new MineSweeperGraphics(null);
             fail();
         } catch (Exception e) {
             assertNull(g);
@@ -34,19 +34,19 @@ public class MineSweeperGraphicsTest {
         // Tests the default construction with invalid file path
         g = null;
         try {
-            g = new MineSweeperGraphics("notsprites.png", null);
+            g = new MineSweeperGraphics("notsprites.png");
             fail();
         } catch (Exception e) {
             assertNull(g);
         }
         
-        // Tests the default construction with invalid file path
+        // Tests the default construction with valid file path
         g = null;
         try {
-            g = new MineSweeperGraphics("minesprites.png", null);
-            fail();
+            g = new MineSweeperGraphics("minesprites.png");
+            assertNotNull(g);
         } catch (Exception e) {
-            assertNull(g);
+            fail();
         }
     
     }
@@ -61,16 +61,17 @@ public class MineSweeperGraphicsTest {
         JFrame frame = null;
         
         // Tests the repaint method with null mf
-        g = new MineSweeperGraphics(SPRITE_SHEET, null);
+        g = new MineSweeperGraphics(SPRITE_SHEET);
         frame = new JFrame("Psuedo frame");
         try {
             g.repaint(null, frame);
-        } catch (IllegalArgumentException e) {
             fail();
+        } catch (IllegalArgumentException e) {
+            // Assume didn't paint
         }
         
         // Tests the repaint method with valid mf
-        g = new MineSweeperGraphics(SPRITE_SHEET, null);
+        g = new MineSweeperGraphics(SPRITE_SHEET);
         mf = new Minefield(1, 1, 1);
         frame = new JFrame("Psuedo frame");
         try {
@@ -106,7 +107,7 @@ public class MineSweeperGraphicsTest {
         Minefield mf = null;
         
         // Tests getDisplay before painting
-        g = new MineSweeperGraphics(SPRITE_SHEET, null);
+        g = new MineSweeperGraphics(SPRITE_SHEET);
         try {
             
         } catch (Exception e) {

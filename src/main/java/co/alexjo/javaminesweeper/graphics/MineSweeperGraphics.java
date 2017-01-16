@@ -43,9 +43,14 @@ public class MineSweeperGraphics {
      */
     public void repaint (Minefield mf, JFrame frame) {
         
+        if (mf == null || frame == null) {
+            throw new IllegalArgumentException();
+        }
+        
         Graphics g = frame.getGraphics();
         
-        g.drawImage(minefieldImage, 0, 72, frame);
+        if (minefieldImage == null) paintMinefield(mf);
+        g.drawImage(minefieldImage, 0, 72, null);
         
         // Draws the display face
         int face = mf.getFace();
@@ -70,9 +75,8 @@ public class MineSweeperGraphics {
     }
     
     /**
-     * 
-     * @param mf 
-     * @param io 
+     * Repaints the minefield grid squares. 
+     * @param mf The minefield to paint
      */
     public void paintMinefield (Minefield mf) {
         if (mf == null) {
@@ -102,7 +106,7 @@ public class MineSweeperGraphics {
                     }
                 }
                 image.drawImage(squareSprite, i * 16, j * 16, null);
-            }
-        }
+            } // for j
+        } // for i
     }
 }

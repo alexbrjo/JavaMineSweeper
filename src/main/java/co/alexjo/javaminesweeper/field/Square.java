@@ -6,25 +6,18 @@ package co.alexjo.javaminesweeper.field;
  * @author Alex Johnson
  */
 public class Square {
-    
     /** The x position of the square in the mine field, relative to the top */
     private int x;
-    
     /** The y position of the square in the mine field, relative to the left */
     private int y;
-    
     /** If the square contains a mine */
     private boolean mine;
-    
     /** the number of mines that are adjacent to the square */
     private int adjacentMines;
-    
     /** Whether the square has been cleared */
     private boolean cleared = false;
-    
     /** Whether the square has been flagged */
     private boolean flagged = false;
-    
     /** Whether the square was the source of the explosion */
     private boolean exploded;
     
@@ -44,7 +37,6 @@ public class Square {
     /**
      * Clicks the square. Returns whether the square exploded -1, nothing 0, 
      * or cleared 1.
-     * @param right Whether the mouse click was the right mouse button
      * @return whether the square exploded -1, nothing 0, cleared or 1
      */
     public int click () {
@@ -58,35 +50,6 @@ public class Square {
         }
         
         return 0;
-    }
-    
-    /** 
-     * Sets flagged to true
-     */
-    public void addFlag () {
-        flagged = true;
-    }
-    
-    /** 
-     * Sets flagged to false
-     */
-    public void removeFlag () {
-        flagged = false;
-    }
-    
-    /**
-     * Toggles the flagged boolean
-     */
-    public void toggleFlag () {
-        flagged = !flagged;
-    }
-    
-    /**
-     * Gets whether the square is cleared.
-     * @return whether the square is cleared
-     */
-    public boolean isCleared () {
-        return cleared;
     }
 
     /**
@@ -170,6 +133,14 @@ public class Square {
         }
         this.adjacentMines = adjacentMines;
     }
+    
+    /**
+     * Gets whether the square is cleared.
+     * @return whether the square is cleared
+     */
+    public boolean isCleared () {
+        return cleared;
+    }
 
     /**
      * If the square is flagged.
@@ -177,6 +148,27 @@ public class Square {
      */
     public boolean isFlagged() {
         return flagged;
+    }
+    
+    /** 
+     * Sets flagged to true
+     */
+    public void addFlag () {
+        flagged = true;
+    }
+    
+    /** 
+     * Sets flagged to false
+     */
+    public void removeFlag () {
+        flagged = false;
+    }
+    
+    /**
+     * Toggles the flagged boolean
+     */
+    public void toggleFlag () {
+        flagged = !flagged;
     }
     
     /**

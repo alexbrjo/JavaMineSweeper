@@ -5,40 +5,26 @@ package co.alexjo.javaminesweeper.field;
  * @author Alex Johnson
  */
 public class Minefield {
-    
     /** The max width to set the Minefield to */
     public final int MAX_WIDTH = 40;
-    
     /** The max height to set the Minefield to */
     public final int MAX_HEIGHT = 40;
-    
-    /** The number of mines on the field */
-    private int numberOfMines;
-    
     /** The width of the Minefield */
     private int width;
-    
     /** The height of the Minefield */
     private int height;
-    
     /** The array of squares in the field */
     private Square[][] board;
-    
     /** The array of mines in the field */
     private Square[] mines;
-    
     /** The creation of the minefield */
     private long startTime;
-    
     /** The end time of win or lose  */
     private int finalTime;
-    
     /** If the minefield has exploded */
     private boolean explode;
-    
     /** If mouse is down on face button */
     private boolean faceButton;
-    
     /** If the mouse is down on the mine field*/
     private boolean mouseDown;
     
@@ -57,11 +43,98 @@ public class Minefield {
     }
     
     /**
+     * Generates the squares for the minefield. Must be a positive integer of
+     * number of mines.
+     * @param numberOfMines The number of mines to generate
+     * @throws IllegalArgumentException if number of mines is a negative or 
+     *      zero integer. Or is greater than the total number of squares.
+     */
+    private void generateField (int numberOfMines) {
+        // determines the area of the field
+        int area = width * height;
+        
+        // can't have a negative number of mines
+        if (numberOfMines < 0) {
+            throw new IllegalArgumentException("Mines must be a non-negative integer");
+        }
+        
+        // can't have more mines than spaces
+        if (area < numberOfMines) {
+            throw new IllegalArgumentException("More mines than spaces");
+        }
+        
+        // given chance of mine in square
+        double chanceOfMine = (double)numberOfMines / area;
+        int minesPlaced = 0;
+        board = new Square[width][height];
+        mines = new Square[numberOfMines];
+        
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                Square s = null;
+                if (Math.random() < chanceOfMine && numberOfMines > minesPlaced) {
+                    s = new Square(i, j, true);
+                    mines[minesPlaced] = s;
+                    minesPlaced++;
+                } else {
+                    s = new Square(i, j, false);
+                }
+                board[i][j] = s;
+            } // for j
+        } // for i
+        
+        setAdjacentMines();
+        
+        startTime = System.currentTimeMillis();
+    }
+    
+    /**
+     * Sets adjacent mines for every square in the minefield
+     */
+    private void setAdjacentMines () {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                int adjacentMines = 0;
+                if (safeGetSquare(i - 1, j - 1).isMine()) {adjacentMines++;}
+                if (safeGetSquare(i    , j - 1).isMine()) {adjacentMines++;}
+                if (safeGetSquare(i + 1, j - 1).isMine()) {adjacentMines++;}
+                if (safeGetSquare(i - 1, j    ).isMine()) {adjacentMines++;}
+                if (safeGetSquare(i + 1, j    ).isMine()) {adjacentMines++;}
+                if (safeGetSquare(i - 1, j + 1).isMine()) {adjacentMines++;}
+                if (safeGetSquare(i    , j + 1).isMine()) {adjacentMines++;}
+                if (safeGetSquare(i + 1, j + 1).isMine()) {adjacentMines++;}
+                getSquare(i, j).setAdjacentMines(adjacentMines);
+            }
+        }
+    }
+    
+    /**
      * Gets the mines form the field.
      * @return all the mines from the field
      */
     public Square[] getMines () {
         return mines;
+    }
+    
+    /**
+     * Manually gets and updates the state of the field. -1 for exploded, 
+     * 0 for in-play and 1 for cleared.
+     * @return the state of the field.
+     */
+    public int getFieldState () {
+        boolean clear = true;
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (board[i][j].isCleared()) {
+                    if (board[i][j].isMine()) {
+                        return -1;
+                    }
+                } else {
+                    clear = false;
+                }
+            }
+        }
+        return clear ? 1 : 0;
     }
     
     /**
@@ -99,33 +172,12 @@ public class Minefield {
     }
     
     /**
-     * Manually gets and updates the state of the field. -1 for exploded, 
-     * 0 for in-play and 1 for cleared.
-     * @return the state of the field.
-     */
-    public int getFieldState () {
-        boolean clear = true;
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                if (board[i][j].isCleared()) {
-                    if (board[i][j].isMine()) {
-                        return -1;
-                    }
-                } else {
-                    clear = false;
-                }
-            }
-        }
-        return clear ? 1 : 0;
-    }
-    
-    /**
      * Clears a specific square. 
      * @param x The x of the square to click
      * @param y The y of the square to click
      * @throws IllegalArgumentException if the x or y is outside the bounds
      */
-    public void clearSquare (int x, int y) {
+    private void clearSquare (int x, int y) {
         int res = board[x][y].click();
         if (res == -1) {
             for (int i = 0; i < width; i++) {
@@ -243,67 +295,6 @@ public class Minefield {
     }
     
     /**
-     * Generates the squares for the minefield. Must be a positive integer of
-     * number of mines.
-     * @param numberOfMines The number of mines to generate
-     * @throws IllegalArgumentException if number of mines is a negative or 
-     *      zero integer. Or is greater than the total number of squares.
-     */
-    private void generateField (int numberOfMines) {
-        // determines the area of the field
-        int area = width * height;
-        
-        // can't have a negative number of mines
-        if (numberOfMines < 0) {
-            throw new IllegalArgumentException("Mines must be a non-negative integer");
-        }
-        
-        // can't have more mines than spaces
-        if (area < numberOfMines) {
-            throw new IllegalArgumentException("More mines than spaces");
-        }
-        
-        this.numberOfMines = numberOfMines;
-       
-        
-        // given chance of mine in square
-        double chanceOfMine = (double)numberOfMines / area;
-        int minesPlaced = 0;
-        board = new Square[width][height];
-        mines = new Square[numberOfMines];
-        
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                Square s = null;
-                if (Math.random() < chanceOfMine && numberOfMines > minesPlaced) {
-                    s = new Square(i, j, true);
-                    mines[minesPlaced] = s;
-                    minesPlaced++;
-                } else {
-                    s = new Square(i, j, false);
-                }
-                board[i][j] = s;
-            } // for j
-        } // for i
-        
-        //sets adjacent mines
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                int adjacentMines = 0;
-                if (safeGetSquare(i - 1, j - 1).isMine()) {adjacentMines++;}
-                if (safeGetSquare(i    , j - 1).isMine()) {adjacentMines++;}
-                if (safeGetSquare(i + 1, j - 1).isMine()) {adjacentMines++;}
-                if (safeGetSquare(i - 1, j    ).isMine()) {adjacentMines++;}
-                if (safeGetSquare(i + 1, j    ).isMine()) {adjacentMines++;}
-                if (safeGetSquare(i - 1, j + 1).isMine()) {adjacentMines++;}
-                if (safeGetSquare(i    , j + 1).isMine()) {adjacentMines++;}
-                if (safeGetSquare(i + 1, j + 1).isMine()) {adjacentMines++;}
-                getSquare(i, j).setAdjacentMines(adjacentMines);
-            }
-        }
-    }
-    
-    /**
      * The time since creation of the battlefield. Stops when the game is won.
      * @return The time since creation of the battlefield
      */
@@ -350,7 +341,6 @@ public class Minefield {
     /**
      * Gets the index of which face to draw, 0 for pressed, 1 for normal, 2
      * for square clicked, 3 for lose, 4 for win
-     * 
      * @return the index of the current face
      */
     public int getFace () {
@@ -427,6 +417,7 @@ public class Minefield {
     
     /**
      * Sets if the face button is being pressed
+     * @param down Whether the face button is down or not
      */
     public void setButton (boolean down) {
         faceButton = down;

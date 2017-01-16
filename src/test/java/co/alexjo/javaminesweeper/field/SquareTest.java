@@ -57,32 +57,6 @@ public class SquareTest {
     }
     
     /**
-     * Tested isCleared method, of class Square
-     */
-    @Test
-    public void testIsCleared () {
-        Square s = null;
-        
-        // Tests when the Square is initalized
-        s = new Square(0, 0, false);
-        try {
-            assertEquals(false, s.isCleared());
-        } catch (Exception e) {
-            fail();
-        }
-        
-        // 
-        s = new Square(0, 0, false);
-        try {
-            assertEquals(false, s.isCleared());
-            s.click();
-            assertEquals(true, s.isCleared());
-        } catch (Exception e) {
-            fail();
-        }
-    }
-    
-    /**
      * Tests the click method, of class Square
      */
     @Test
@@ -193,9 +167,9 @@ public class SquareTest {
         }
         
         // Tests y as standard value, 27
-        s = new Square(1, 27, true);
+        s = new Square(1, 26, true);
         try {
-            assertEquals(27, s.getY());
+            assertEquals(26, s.getY());
         } catch (Exception e) {
             fail();
         }
@@ -422,5 +396,67 @@ public class SquareTest {
         }
         
     }
+    
+    /**
+     * Tests isCleared method, of class Square
+     */
+    @Test
+    public void testIsCleared () {
+        Square s = null;
+        
+        // Tests when the Square is initalized
+        s = new Square(0, 0, false);
+        try {
+            assertEquals(false, s.isCleared());
+        } catch (Exception e) {
+            fail();
+        }
+        
+        // 
+        s = new Square(0, 0, false);
+        try {
+            assertEquals(false, s.isCleared());
+            s.click();
+            assertEquals(true, s.isCleared());
+        } catch (Exception e) {
+            fail();
+        }
+    }
+    
+    /**
+     * Tests the isFlagged method, of class Square
+     */
+    @Test
+    public void testIsFlagged () {}
+    
+    /**
+     * Tests the addFlag method, of class Square
+     */
+    @Test
+    public void testAddFlag () {}
+    
+    /**
+     * Tests the removeFlag method, of class Square
+     */
+    @Test
+    public void testRemoveFlag () {}
+    
+    /**
+     * Tests the toggleFlag method, of class Square
+     */
+    @Test
+    public void testToggleFlag () {}
+    
+    /**
+     * Tests the hasExploded method, of class Square
+     */
+    @Test
+    public void testHasExploded () {}
+    
+    /**
+     * Tests the explode method, of class Square
+     */
+    @Test
+    public void testExplode (){}
     
 }

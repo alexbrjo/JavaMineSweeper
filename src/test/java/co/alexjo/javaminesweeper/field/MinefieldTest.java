@@ -174,7 +174,7 @@ public class MinefieldTest {
         // Tests when single empty and clicked, should clear
         mf = new Minefield(1, 1, 0);
         try {
-            mf.click(0, 0);
+            mf.click(0, 0, 0, false, false);
             assertEquals(1, mf.getFieldState());    
         } catch (Exception e) {
             fail();
@@ -183,7 +183,7 @@ public class MinefieldTest {
         // Tests when single empty and clicked, should explode
         mf = new Minefield(1, 1, 1);
         try {
-            mf.click(0, 0);
+            mf.click(0, 0, 0, false, false);
             assertEquals(-1, mf.getFieldState());    
         } catch (Exception e) {
             fail();
@@ -193,8 +193,8 @@ public class MinefieldTest {
         // in a size 9 board with 8 mines will guarantee a hit
         mf = new Minefield(3, 3, 8);
         try {
-            mf.click(0, 0);
-            mf.click(0, 1);
+            mf.click(0, 0, 0, false, false);
+            mf.click(0, 1, 0, false, false);
             assertEquals(-1, mf.getFieldState());    
         } catch (Exception e) {
             fail();
@@ -204,9 +204,9 @@ public class MinefieldTest {
         // clicks in a size 4 board with 4 mines will guarantee a clear
         mf = new Minefield(2, 2, 0);
         try {
-            mf.click(0, 0);
-            mf.click(0, 1);
-            mf.click(1, 0);
+            mf.click(0, 0, 0, false, false);
+            mf.click(0, 1, 0, false, false);
+            mf.click(1, 0, 0, false, false);
             assertEquals(0, mf.getFieldState());    
         } catch (Exception e) {
             fail();
@@ -216,10 +216,10 @@ public class MinefieldTest {
         // in a size 4 board with 4 mines will guarantee a clear
         mf = new Minefield(2, 2, 0);
         try {
-            mf.click(0, 0);
-            mf.click(0, 1);
-            mf.click(1, 0);
-            mf.click(1, 1);
+            mf.click(0, 0, 0, false, false);
+            mf.click(0, 1, 0, false, false);
+            mf.click(1, 0, 0, false, false);
+            mf.click(1, 1, 0, false, false);
             assertEquals(1, mf.getFieldState());    
         } catch (Exception e) {
             fail();
@@ -227,10 +227,66 @@ public class MinefieldTest {
     }
     
     /**
+     * Tests the getSquare method, of class Minefield
+     */
+    @Test
+    public void testGetSqaure () {
+        fail();
+    }
+    
+    /**
+     * Tests the click method, of class Minefield
+     */
+    @Test
+    public void testClick () {
+        fail();
+    }
+    
+    /**
+     * Tests the isClear method, of class Minefield
+     */
+    @Test
+    public void testIsClear () {
+        fail();
+    }
+    
+    /**
+     * Tests the isExploded method, of class Minefield
+     */
+    @Test
+    public void testIsExploded () {
+        fail();
+    }
+    
+    /**
+     * Tests the exploded method, of class Minefield
+     */
+    @Test
+    public void testExploded () {
+        fail();
+    }
+    
+    /**
      * Tests the getNumberOfMines method, of class Minefield 
      */
     @Test
     public void testGetNumberOfMines () {
+        fail();
+    }
+    
+    /**
+     * Tests the getFace method, of class Minefield
+     */
+    @Test
+    public void testGetFace () {
+        fail();
+    }
+    
+    /**
+     * Tests the getNumberOfMinesDigitized method, of class Minefield 
+     */
+    @Test
+    public void testGetNumberOfMinesDigitized () {
         Minefield mf = null;
         
         // Test when numberOfMines is the min
@@ -253,6 +309,50 @@ public class MinefieldTest {
         mf = new Minefield(6, 6, 36);
         try {
             assertEquals(36, mf.getNumberOfMines());
+        } catch (Exception e) {
+            fail();
+        }
+    }
+    
+    /**
+     * Tests the getTime method, of class Minefield 
+     */
+    @Test
+    public void testGetTime () {
+        fail();
+    }
+    
+    /**
+     * Test the getTimeDigitized method, of class Minefield
+     */
+    @Test
+    public void testGetTimeDigitized () {
+        Minefield mf = new Minefield(1, 1, 0);
+        
+        // Tests getTime immediatly
+        try {
+            int[] a = mf.getTimeDigitized();
+            assertEquals(3, a.length);
+            assertTrue(a[0] < 10);
+            assertTrue(a[1] < 10);
+            assertTrue(a[2] < 10);
+            // no combo of array numbers should be greater than 99
+            assertTrue(a[1] * 10 + a[0] <= 99);
+            assertTrue(a[2] * 10 + a[0] <= 99);
+            assertTrue(a[2] * 10 + a[1] <= 99);
+            // no combo of array numbers
+            assertTrue(a[0] * 100 + a[1] * 10 + a[2] <= 999);
+        } catch (Exception e) {
+            fail();
+        }
+        
+        // Tests getTime after a few more nano-seconds
+        try {
+            int[] a = mf.getTimeDigitized();
+            assertTrue(a.length == 3);
+            assertTrue(a[0] < 10);
+            assertTrue(a[1] < 10);
+            assertTrue(a[2] < 10);
         } catch (Exception e) {
             fail();
         }
@@ -282,7 +382,6 @@ public class MinefieldTest {
         }
     }
     
-    
     /**
      * Tests the getHeight method, of class Minefield
      */
@@ -308,39 +407,19 @@ public class MinefieldTest {
     }
     
     /**
-     * Test the getTime method, of class Minefield
+     * Tests the setButton method, of class Minefield
      */
     @Test
-    public void testGetTime () {
-        Minefield mf = new Minefield(1, 1, 0);
-        
-        // Tests getTime immediatly
-        try {
-            int[] a = mf.getTime();
-            assertEquals(3, a.length);
-            assertTrue(a[0] < 10);
-            assertTrue(a[1] < 10);
-            assertTrue(a[2] < 10);
-            // no combo of array numbers should be greater than 99
-            assertTrue(a[1] * 10 + a[0] <= 99);
-            assertTrue(a[2] * 10 + a[0] <= 99);
-            assertTrue(a[2] * 10 + a[1] <= 99);
-            // no combo of array numbers
-            assertTrue(a[0] * 100 + a[1] * 10 + a[2] <= 999);
-        } catch (Exception e) {
-            fail();
-        }
-        
-        // Tests getTime after a few more nano-seconds
-        try {
-            int[] a = mf.getTime();
-            assertTrue(a.length == 3);
-            assertTrue(a[0] < 10);
-            assertTrue(a[1] < 10);
-            assertTrue(a[2] < 10);
-        } catch (Exception e) {
-            fail();
-        }
+    public void testSetButton () {
+        fail();
+    }
+    
+    /**
+     * Tests the button method, of class Minefield
+     */
+    @Test
+    public void testButton () {
+        fail();
     }
     
 }
