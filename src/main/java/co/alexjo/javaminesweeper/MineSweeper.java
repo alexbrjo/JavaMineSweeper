@@ -53,7 +53,7 @@ public class MineSweeper implements MouseListener, MouseMotionListener, Runnable
      * @param args The arguments from the command line
      */
     public static void main(String[] args) {
-        MineSweeper game = new MineSweeper(30, 30, 10);
+        MineSweeper game = new MineSweeper(30, 30, 100);
     }
     
     /**
