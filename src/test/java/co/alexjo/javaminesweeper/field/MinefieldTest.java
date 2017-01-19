@@ -69,36 +69,24 @@ public class MinefieldTest {
         
         // Test mines on lower boundary, 0
         mf = null;
-        try {
-            mf = new Minefield(1, 1, 0);
-            assertEquals(1, mf.getWidth());
-            assertEquals(1, mf.getHeight());
-            assertEquals(0, mf.getNumberOfMines());
-        } catch (IllegalArgumentException e) {
-            fail();
-        }
+        mf = new Minefield(1, 1, 0);
+        assertEquals(1, mf.getWidth());
+        assertEquals(1, mf.getHeight());
+        assertEquals(0, mf.getNumberOfMines());
         
         // Test max mines for size of 4x4, below boundary
         mf = null;
-        try {
-            mf = new Minefield(4, 4, 15);
-            assertEquals(4, mf.getWidth());
-            assertEquals(4, mf.getHeight());
-            assertEquals(15, mf.getNumberOfMines());
-        } catch (IllegalArgumentException e) {
-            fail();
-        }
+        mf = new Minefield(4, 4, 15);
+        assertEquals(4, mf.getWidth());
+        assertEquals(4, mf.getHeight());
+        assertEquals(15, mf.getNumberOfMines());
         
         // Test max mines for size of 3x5, on boundary
         mf = null;
-        try {
-            mf = new Minefield(3, 5, 15);
-            assertEquals(3, mf.getWidth());
-            assertEquals(5, mf.getHeight());
-            assertEquals(15, mf.getNumberOfMines());
-        } catch (IllegalArgumentException e) {
-            fail();
-        }
+        mf = new Minefield(3, 5, 15);
+        assertEquals(3, mf.getWidth());
+        assertEquals(5, mf.getHeight());
+        assertEquals(15, mf.getNumberOfMines());
         
         // Test max mines for size of 6x7, above boundary
         mf = null;
@@ -115,45 +103,29 @@ public class MinefieldTest {
      */
     @Test
     public void testGetMines () {
-        Minefield mf = null;
         
         // Tests that it returns not null
-        mf = new Minefield(1, 1, 0);
-        try {
-            mf.getMines();
-            assertNotNull(mf);
-        } catch (IllegalArgumentException e) {
-            fail();
-        }
+        Minefield m1 = new Minefield(1, 1, 0);
+        m1.getMines();
+        assertNotNull(m1);
         
         // Tests when Minefield has 0 mines
-        mf = new Minefield(1, 1, 0);
-        try {
-            Square[] mines = mf.getMines();
-            assertEquals(0, mines.length);
-        } catch (IllegalArgumentException e) {
-            fail();
-        }
+        Minefield m2 = new Minefield(1, 1, 0);
+        Square[] mines2 = m2.getMines();
+        assertEquals(0, mines2.length);
         
         // Tests when Minefield has 3 mines
-        mf = new Minefield(3, 3, 3);
-        try {
-            Square[] mines = mf.getMines();
-            assertEquals(3, mines.length);
-        } catch (IllegalArgumentException e) {
-            fail();
-        }
+        Minefield m3 = new Minefield(3, 3, 3);
+        Square[] mines3 = m3.getMines();
+        assertEquals(3, mines3.length);
         
         // Tests that each cell has a Square
-        mf = new Minefield(3, 3, 3);
-        try {
-            Square[] mines = mf.getMines();
-            for (Square mine : mines) {
-                assertTrue(mine instanceof Square);
-            }
-        } catch (IllegalArgumentException e) {
-            fail();
+        Minefield m4 = new Minefield(3, 3, 3);
+        Square[] mines4 = m4.getMines();
+        for (Square mine : mines4) {
+            assertTrue(mine instanceof Square);
         }
+        
     }
     
     /**
@@ -161,69 +133,45 @@ public class MinefieldTest {
      */
     @Test
     public void testGetFieldState () {
-        Minefield mf = null;
         
         // Tests when single mine and not clicked, should be not clear
-        mf = new Minefield(1, 1, 1);
-        try {
-            assertEquals(0, mf.getFieldState());
-        } catch (Exception e) {
-            fail();
-        }
+        Minefield m1 = new Minefield(1, 1, 1);
+        assertEquals(0, m1.getFieldState());
         
         // Tests when single empty and clicked, should clear
-        mf = new Minefield(1, 1, 0);
-        try {
-            mf.click(0, 0, 0, false, false);
-            assertEquals(1, mf.getFieldState());    
-        } catch (Exception e) {
-            fail();
-        }
+        Minefield m2 = new Minefield(1, 1, 0);
+        m2.click(0, 0, 0, false, false);
+        assertEquals(1, m2.getFieldState());  
         
         // Tests when single empty and clicked, should explode
-        mf = new Minefield(1, 1, 1);
-        try {
-            mf.click(0, 0, 0, false, false);
-            assertEquals(-1, mf.getFieldState());    
-        } catch (Exception e) {
-            fail();
-        }
+        Minefield m3 = new Minefield(1, 1, 1);
+        m3.click(0, 0, 0, false, false);
+        assertEquals(-1, m3.getFieldState());    
         
         // Tests 3x3 board with 8 mines and 8 clicks, should explode. 2 clicks 
         // in a size 9 board with 8 mines will guarantee a hit
-        mf = new Minefield(3, 3, 8);
-        try {
-            mf.click(0, 0, 0, false, false);
-            mf.click(0, 1, 0, false, false);
-            assertEquals(-1, mf.getFieldState());    
-        } catch (Exception e) {
-            fail();
-        }
+        Minefield m4 = new Minefield(3, 3, 8);
+        m4.click(0, 0, 0, false, false);
+        m4.click(0, 1, 0, false, false);
+        assertEquals(-1, m4.getFieldState());  
         
         // Tests 2x2 board with 0 mines and 3 clicks, should not clear. 4 
         // clicks in a size 4 board with 4 mines will guarantee a clear
-        mf = new Minefield(2, 2, 0);
-        try {
-            mf.click(0, 0, 0, false, false);
-            mf.click(0, 1, 0, false, false);
-            mf.click(1, 0, 0, false, false);
-            assertEquals(0, mf.getFieldState());    
-        } catch (Exception e) {
-            fail();
-        }
+        Minefield m5 = new Minefield(2, 2, 0);
+        m5.click(0, 0, 0, false, false);
+        m5.click(0, 1, 0, false, false);
+        m5.click(1, 0, 0, false, false);
+        assertEquals(0, m5.getFieldState());    
         
         // Tests 2x2 board with 0 mines and 4 clicks, should clear. 4 clicks 
         // in a size 4 board with 4 mines will guarantee a clear
-        mf = new Minefield(2, 2, 0);
-        try {
-            mf.click(0, 0, 0, false, false);
-            mf.click(0, 1, 0, false, false);
-            mf.click(1, 0, 0, false, false);
-            mf.click(1, 1, 0, false, false);
-            assertEquals(1, mf.getFieldState());    
-        } catch (Exception e) {
-            fail();
-        }
+        Minefield m6 = new Minefield(2, 2, 0);
+        m6.click(0, 0, 0, false, false);
+        m6.click(0, 1, 0, false, false);
+        m6.click(1, 0, 0, false, false);
+        m6.click(1, 1, 0, false, false);
+        assertEquals(1, m6.getFieldState());  
+            
     }
     
     /**
@@ -231,7 +179,13 @@ public class MinefieldTest {
      */
     @Test
     public void testGetSqaure () {
-        fail();
+        
+        // Tests if it doesn't throw an error
+        Minefield m1 = new Minefield(1, 1, 0);
+        m1.getSquare(0, 0);
+        
+        // @TODO write actual tests
+        
     }
     
     /**
@@ -239,7 +193,24 @@ public class MinefieldTest {
      */
     @Test
     public void testClick () {
-        fail();
+        
+        // Tests if click clears a square
+        Minefield m1 = new Minefield(1, 1, 0);
+        m1.click(0, 0, 1, false, true);
+        assertTrue(m1.getSquare(0, 0).isCleared());
+        
+        // Tests if click explodes a mine
+        Minefield m2 = new Minefield(1, 1, 1);
+        m2.click(0, 0, 1, false, true);
+        assertTrue(m2.getSquare(0, 0).hasExploded());
+        
+        // Tests if click flags/unflags a square
+        Minefield m3 = new Minefield(1, 1, 0);
+        m3.click(0, 0, 3, true, false);
+        assertTrue(m3.getSquare(0, 0).isFlagged());
+        m3.click(0, 0, 3, true, false);
+        assertFalse(m3.getSquare(0, 0).isFlagged());
+        
     }
     
     /**
@@ -247,23 +218,38 @@ public class MinefieldTest {
      */
     @Test
     public void testIsClear () {
-        fail();
+        
+        // Tests if isClear by default
+        Minefield m1 = new Minefield(1, 1, 0);
+        assertFalse(m1.isClear());
+        
+        // Tests isClear after only square is cleared
+        Minefield m2 = new Minefield(1, 1, 0);
+        m2.click(0, 0, 1, false, true);
+        assertTrue(m2.isClear());
+        
     }
-    
+   
     /**
      * Tests the isExploded method, of class Minefield
      */
     @Test
     public void testIsExploded () {
-        fail();
-    }
-    
-    /**
-     * Tests the exploded method, of class Minefield
-     */
-    @Test
-    public void testExploded () {
-        fail();
+        
+        // Tests if no mines are exploded
+        Minefield m1 = new Minefield(4, 4, 2);
+        assertFalse(m1.isExploded());
+        
+        // Tests if all (1) mines are exploded
+        Minefield m2 = new Minefield(1, 1, 1);
+        m2.click(0, 0, 1, false, true);
+        assertTrue(m2.isExploded());
+        
+        // Tests if all (1) squares are cleared
+        Minefield m3 = new Minefield(1, 1, 0);
+        m3.click(0, 0, 1, false, true);
+        assertFalse(m3.isExploded());
+        
     }
     
     /**
@@ -271,7 +257,27 @@ public class MinefieldTest {
      */
     @Test
     public void testGetNumberOfMines () {
-        fail();
+        
+        // Tests when theres no mines 
+        Minefield m1 = new Minefield(4, 4, 0);
+        assertEquals(0, m1.getNumberOfMines());
+        
+        // Tests when a 1/4 of the area is mines
+        Minefield m2 = new Minefield(4, 4, 4);
+        assertEquals(8, m2.getNumberOfMines());
+        
+        // Test when 1/2 of the area is mines
+        Minefield m3 = new Minefield(6, 6, 18);
+        assertEquals(18, m3.getNumberOfMines());
+        
+        // Test when 4/7 of the area is mines
+        Minefield m4 = new Minefield(7, 7, 28);
+        assertEquals(28, m4.getNumberOfMines());
+        
+        // Test when area is all mines
+        Minefield m5 = new Minefield(5, 5, 25);
+        assertEquals(25, m5.getNumberOfMines());
+        
     }
     
     /**
@@ -279,7 +285,28 @@ public class MinefieldTest {
      */
     @Test
     public void testGetFace () {
-        fail();
+        
+        // test when field is normal 
+        Minefield m1 = new Minefield(1, 1, 1);
+        assertEquals(1, m1.getFace());
+        
+        // test when button is down and up
+        Minefield m2 = new Minefield(1, 1, 1);
+        m2.setButton(true);
+        assertEquals(0, m2.getFace());
+        m2.setButton(false);
+        assertEquals(1, m2.getFace());
+        
+        // test when field is exploded 
+        Minefield m3 = new Minefield(1, 1, 1);
+        m3.click(0, 0, 1, true, false);
+        assertEquals(3, m3.getFace());
+        
+        // test when field is cleared 
+        Minefield m4 = new Minefield(1, 1, 0);
+        m4.click(0, 0, 1, true, false);
+        assertEquals(4, m4.getFace());
+            
     }
     
     /**
@@ -287,31 +314,19 @@ public class MinefieldTest {
      */
     @Test
     public void testGetNumberOfMinesDigitized () {
-        Minefield mf = null;
         
         // Test when numberOfMines is the min
-        mf = new Minefield(4, 4, 0);
-        try {
-            assertEquals(0, mf.getNumberOfMines());
-        } catch (Exception e) {
-            fail();
-        }
+        Minefield m1 = new Minefield(4, 4, 0);
+        assertEquals(0, m1.getNumberOfMines());
         
         // Test when numberOfMines is in the middle
-        mf = new Minefield(5, 5, 12);
-        try {
-            assertEquals(12, mf.getNumberOfMines());
-        } catch (Exception e) {
-            fail();
-        }
+        Minefield m2 = new Minefield(5, 5, 12);
+        assertEquals(12, m2.getNumberOfMines());
         
         // Test when numberOfMines is the max
-        mf = new Minefield(6, 6, 36);
-        try {
-            assertEquals(36, mf.getNumberOfMines());
-        } catch (Exception e) {
-            fail();
-        }
+        Minefield m3 = new Minefield(6, 6, 36);
+        assertEquals(36, m3.getNumberOfMines());
+        
     }
     
     /**
@@ -319,7 +334,11 @@ public class MinefieldTest {
      */
     @Test
     public void testGetTime () {
-        fail();
+        
+        // Test that time is greater than zero
+        Minefield m1 = new Minefield(1, 1, 0);
+        assertTrue(m1.getTime() < 0);
+            
     }
     
     /**
@@ -327,35 +346,29 @@ public class MinefieldTest {
      */
     @Test
     public void testGetTimeDigitized () {
-        Minefield mf = new Minefield(1, 1, 0);
         
         // Tests getTime immediatly
-        try {
-            int[] a = mf.getTimeDigitized();
-            assertEquals(3, a.length);
-            assertTrue(a[0] < 10);
-            assertTrue(a[1] < 10);
-            assertTrue(a[2] < 10);
-            // no combo of array numbers should be greater than 99
-            assertTrue(a[1] * 10 + a[0] <= 99);
-            assertTrue(a[2] * 10 + a[0] <= 99);
-            assertTrue(a[2] * 10 + a[1] <= 99);
-            // no combo of array numbers
-            assertTrue(a[0] * 100 + a[1] * 10 + a[2] <= 999);
-        } catch (Exception e) {
-            fail();
-        }
+        Minefield m1 = new Minefield(1, 1, 0); 
+        int[] a = m1.getTimeDigitized();
+        assertEquals(3, a.length);
+        assertTrue(a[0] < 10);
+        assertTrue(a[1] < 10);
+        assertTrue(a[2] < 10);
+        // no combo of array numbers should be greater than 99
+        assertTrue(a[1] * 10 + a[0] <= 99);
+        assertTrue(a[2] * 10 + a[0] <= 99);
+        assertTrue(a[2] * 10 + a[1] <= 99);
+        // no combo of array numbers
+        assertTrue(a[0] * 100 + a[1] * 10 + a[2] <= 999);
         
         // Tests getTime after a few more nano-seconds
-        try {
-            int[] a = mf.getTimeDigitized();
-            assertTrue(a.length == 3);
-            assertTrue(a[0] < 10);
-            assertTrue(a[1] < 10);
-            assertTrue(a[2] < 10);
-        } catch (Exception e) {
-            fail();
-        }
+        Minefield m2 = new Minefield(1, 1, 0);
+        int[] b = m2.getTimeDigitized();
+        assertTrue(a.length == 3);
+        assertTrue(a[0] < 10);
+        assertTrue(a[1] < 10);
+        assertTrue(a[2] < 10);
+        
     }
     
     /**
@@ -363,23 +376,15 @@ public class MinefieldTest {
      */
     @Test
     public void testGetWidth () {
-        Minefield mf = null;
         
         // Tests when the width is set to a minimum
-        mf = new Minefield(1, 1, 0);
-        try {
-            assertEquals(1, mf.getWidth());
-        } catch (Exception e) {
-            fail();
-        }
+        Minefield m1 = new Minefield(1, 1, 0);
+        assertEquals(1, m1.getWidth());
         
         // Tests when the height is set to a middle value
-        mf = new Minefield(10, 10, 0);
-        try {
-            assertEquals(10, mf.getWidth());
-        } catch (Exception e) {
-            fail();
-        }
+        Minefield m2 = new Minefield(10, 10, 0);
+        assertEquals(10, m2.getWidth());
+        
     }
     
     /**
@@ -387,39 +392,48 @@ public class MinefieldTest {
      */
     @Test
     public void testGetHeight () {
-        Minefield mf = null;
         
         // Tests when the height is set to a minimum
-        mf = new Minefield(1, 1, 0);
-        try {
-            assertEquals(1, mf.getHeight());
-        } catch (Exception e) {
-            fail();
-        }
+        Minefield m1 = new Minefield(1, 1, 0);
+        assertEquals(1, m1.getHeight());
         
         // Tests when the height is set to a middle value
-        mf = new Minefield(10, 10, 0);
-        try {
-            assertEquals(10, mf.getHeight());
-        } catch (Exception e) {
-            fail();
-        }
+        Minefield m2 = new Minefield(10, 10, 0);
+        assertEquals(10, m2.getHeight());
+        
     }
     
     /**
-     * Tests the setButton method, of class Minefield
+     * Tests the button method and the setButton method, of class Minefield
      */
     @Test
-    public void testSetButton () {
-        fail();
+    public void testButtonAndSetButton () {
+        
+        // Tests when the button is not set
+        Minefield m1 = new Minefield(1, 1, 0);
+        assertFalse(m1.button());
+        
+        // Tests when the button is set to down
+        Minefield m2 = new Minefield(1, 1, 0);
+        m2.setButton(true);
+        assertTrue(m2.button());
+        
+        // Tests when the button is set to flase
+        Minefield m3 = new Minefield(1, 1, 0);
+        m3.setButton(false);
+        assertFalse(m3.button());
+        
+        // Tests the button set to true, false, true and false
+        Minefield m4 = new Minefield(1, 1, 0);
+        assertEquals(false, m4.button());
+        m4.setButton(true);
+        assertTrue(m4.button());
+        m4.setButton(false);
+        assertFalse(m4.button());
+        m4.setButton(true);
+        assertTrue(m4.button());
+        m4.setButton(false);
+        assertFalse(m4.button());
+        
     }
-    
-    /**
-     * Tests the button method, of class Minefield
-     */
-    @Test
-    public void testButton () {
-        fail();
-    }
-    
 }

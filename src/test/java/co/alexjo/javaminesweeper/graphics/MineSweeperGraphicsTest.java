@@ -70,15 +70,6 @@ public class MineSweeperGraphicsTest {
             // Assume didn't paint
         }
         
-        // Tests the repaint method with valid mf
-        g = new MineSweeperGraphics(SPRITE_SHEET);
-        mf = new Minefield(1, 1, 1);
-        frame = new JFrame("Psuedo frame");
-        try {
-            g.repaint(mf, frame);
-        } catch (IllegalArgumentException e) {
-            fail();
-        }
     }
     
     /**
