@@ -2,6 +2,8 @@ package co.alexjo.javaminesweeper.graphics;
 
 import co.alexjo.javaminesweeper.field.Minefield;
 import co.alexjo.javaminesweeper.field.Square;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
