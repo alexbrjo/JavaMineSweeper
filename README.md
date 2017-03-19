@@ -11,7 +11,7 @@ Class Structure
         - SpriteCropper: has hardcoded sprite positions on the sprite sheet
     - JFrame
 
-![alt tag =250x](endgame.png)
+![alt tag](endgame.png =250x)
 
 Test Driven Development and JUnit
 -----------------------------------
