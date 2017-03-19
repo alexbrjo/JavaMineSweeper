@@ -11,6 +11,8 @@ Class Structure
         - SpriteCropper: has hardcoded sprite positions on the sprite sheet
     - JFrame
 
+![alt tag](endgame.png)
+
 Test Driven Development and JUnit
 -----------------------------------
 For the classes Minefield and Square I wrote the Tests before the code. It 
