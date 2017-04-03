@@ -9,7 +9,3 @@ RUN apt-get install -y maven
 ADD pom.xml
 RUN ["mvn", "dependency:resolve"]
 RUN ["mvn", "verify"]
-
-# test and run
-RUN ["mvn", "compile"]
-RUN ["mvn", "test"]
