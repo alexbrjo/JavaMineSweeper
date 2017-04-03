@@ -1,14 +1,20 @@
 pipeline {
-  agent any
+  agent {
+    dockerfile {
+      filename 'Dockerfile'
+    }
+    
+  }
   stages {
     stage('build') {
       steps {
-        sh 'mvn compile'
+        sh '''mvn compile
+'''
       }
     }
     stage('test') {
       steps {
-        sh 'mvn test '
+        sh 'test'
       }
     }
   }
