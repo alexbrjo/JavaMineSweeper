@@ -41,15 +41,15 @@ public class Square {
      */
     public int click () {
         if (cleared) {
-            return 0;
+            return 0; // if cleared do nothing
         } 
         
-        if (!flagged) {
-            cleared = true;
-            return mine ? -1 : 1;
+        if (!flagged) { // if not flagged clear square and explode if mine
+            cleared = true; 
+            return mine ? -1 : 1; 
         }
         
-        return 0;
+        return 0; // if flagged do nothing
     }
 
     /**

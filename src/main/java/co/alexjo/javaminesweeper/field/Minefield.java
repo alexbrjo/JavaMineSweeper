@@ -179,7 +179,7 @@ public class Minefield {
      */
     private void clearSquare (int x, int y) {
         int res = board[x][y].click();
-        if (res == -1) {
+        if (res == -1) { // if exploded clear board and end game
             for (int i = 0; i < width; i++) {
                 for (int j = 0; j < height; j++) {
                     board[i][j].click();
@@ -188,12 +188,12 @@ public class Minefield {
             finalTime = getTime();
             board[x][y].explode(); // sets the square as the origin of the explosion
             explode = true;
-        } else if (res == 1) {
+        } else if (res == 1) {  // if cleared clear adjacent
             if (board[x][y].getAdjacentMines() == 0) {
                clearAdjancentSquares(x, y);
             }
 
-            // If the board is clear end the game and flag remainding mines
+            // If the board is clear end the game and flag remaining mines
             if (isClear()) { 
                 finalTime = getTime();
                 for (int i = 0; i < width; i++) {
@@ -226,8 +226,8 @@ public class Minefield {
         
         mouseDown = b != 0;
         
-        if (finalTime == 0) {
-            if (b == 1 && released && mouseDown) {
+        if (finalTime == 0) { // if the game isn't over
+            if (b == 1 && released) { // if the button is 1 and it is released
                 clearSquare(x, y);
             } else if (b == 3 && pressed) { // if it's a right click toggle flag
                 if (!board[x][y].isCleared()) {
@@ -344,12 +344,12 @@ public class Minefield {
      * @return the index of the current face
      */
     public int getFace () {
-        if (explode) {
-            return 3; // if exploded return 3 for lose
-        } else if (finalTime > 0) {
-           return 4;
-        } else if (faceButton) {
+        if (faceButton) { // facebutton getting priority
             return 0;
+        } else if (explode) {
+            return 3; // if exploded return 3 for lose
+        } else if (isClear()) {
+           return 4;
         } else if (mouseDown) {
             return 2;
         } else { // If game state is normal print normal face

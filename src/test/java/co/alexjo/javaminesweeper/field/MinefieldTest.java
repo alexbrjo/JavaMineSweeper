@@ -106,8 +106,7 @@ public class MinefieldTest {
         
         // Tests that it returns not null
         Minefield m1 = new Minefield(1, 1, 0);
-        m1.getMines();
-        assertNotNull(m1);
+        assertNotNull(m1.getMines());
         
         // Tests when Minefield has 0 mines
         Minefield m2 = new Minefield(1, 1, 0);
@@ -123,7 +122,7 @@ public class MinefieldTest {
         Minefield m4 = new Minefield(3, 3, 3);
         Square[] mines4 = m4.getMines();
         for (Square mine : mines4) {
-            assertTrue(mine instanceof Square);
+            assertTrue(mine.isMine());
         }
         
     }
@@ -140,36 +139,34 @@ public class MinefieldTest {
         
         // Tests when single empty and clicked, should clear
         Minefield m2 = new Minefield(1, 1, 0);
-        m2.click(0, 0, 0, false, false);
+        m2.click(0, 0, 1, false, true);
         assertEquals(1, m2.getFieldState());  
         
         // Tests when single empty and clicked, should explode
         Minefield m3 = new Minefield(1, 1, 1);
-        m3.click(0, 0, 0, false, false);
+        m3.click(0, 0, 1, false, true);
+        m3.click(0, 0, 0, false, false); // release mouse
         assertEquals(-1, m3.getFieldState());    
         
-        // Tests 3x3 board with 8 mines and 8 clicks, should explode. 2 clicks 
+        // Tests 3x3 board with 8 mines and 2 clicks, should explode. 2 clicks 
         // in a size 9 board with 8 mines will guarantee a hit
         Minefield m4 = new Minefield(3, 3, 8);
-        m4.click(0, 0, 0, false, false);
-        m4.click(0, 1, 0, false, false);
+        m4.click(0, 0, 1, false, true);
+        m4.click(0, 1, 0, false, false); // release mouse
         assertEquals(-1, m4.getFieldState());  
         
-        // Tests 2x2 board with 0 mines and 3 clicks, should not clear. 4 
-        // clicks in a size 4 board with 4 mines will guarantee a clear
+        // Tests 2x2 board with 0 mines and 1 clicks, should clear entire board
         Minefield m5 = new Minefield(2, 2, 0);
-        m5.click(0, 0, 0, false, false);
-        m5.click(0, 1, 0, false, false);
-        m5.click(1, 0, 0, false, false);
-        assertEquals(0, m5.getFieldState());    
+        m5.click(0, 0, 1, false, true);
+        assertEquals(1, m5.getFieldState());    
         
         // Tests 2x2 board with 0 mines and 4 clicks, should clear. 4 clicks 
         // in a size 4 board with 4 mines will guarantee a clear
         Minefield m6 = new Minefield(2, 2, 0);
-        m6.click(0, 0, 0, false, false);
-        m6.click(0, 1, 0, false, false);
-        m6.click(1, 0, 0, false, false);
-        m6.click(1, 1, 0, false, false);
+        m6.click(0, 0, 1, false, true);
+        m6.click(0, 1, 1, false, true);
+        m6.click(1, 0, 1, false, true);
+        m6.click(1, 1, 1, false, true);
         assertEquals(1, m6.getFieldState());  
             
     }
@@ -264,7 +261,7 @@ public class MinefieldTest {
         
         // Tests when a 1/4 of the area is mines
         Minefield m2 = new Minefield(4, 4, 4);
-        assertEquals(8, m2.getNumberOfMines());
+        assertEquals(4, m2.getNumberOfMines());
         
         // Test when 1/2 of the area is mines
         Minefield m3 = new Minefield(6, 6, 18);
@@ -299,12 +296,14 @@ public class MinefieldTest {
         
         // test when field is exploded 
         Minefield m3 = new Minefield(1, 1, 1);
-        m3.click(0, 0, 1, true, false);
+        m3.click(0, 0, 1, false, true); // click mouse, exploding mine
+        m3.click(0, 0, 0, false, false); // release mouse
         assertEquals(3, m3.getFace());
         
         // test when field is cleared 
         Minefield m4 = new Minefield(1, 1, 0);
-        m4.click(0, 0, 1, true, false);
+        m4.click(0, 0, 1, true, false); // click mouse, clearing the board
+        m4.click(0, 0, 0, false, false); // release mouse
         assertEquals(4, m4.getFace());
             
     }
@@ -337,7 +336,7 @@ public class MinefieldTest {
         
         // Test that time is greater than zero
         Minefield m1 = new Minefield(1, 1, 0);
-        assertTrue(m1.getTime() < 0);
+        assertTrue(m1.getTime() >= 0);
             
     }
     

@@ -26,13 +26,8 @@ public class MineSweeperTest {
         MineSweeper ms = null;
         
         // Tests default construction
-        ms = null;
-        try { 
-            ms = new MineSweeper(WIDTH, HEIGHT, MINES);
-            assertNotNull(ms);
-        } catch (Exception e) {
-            fail();
-        }       
+        ms = new MineSweeper(WIDTH, HEIGHT, MINES);
+        assertNotNull(ms);
     }
     
     /**
@@ -43,13 +38,8 @@ public class MineSweeperTest {
         MineSweeper ms = null;
         
         // Tests the quit method
-        ms = null;
-        try {
-            ms = new MineSweeper(WIDTH, HEIGHT, MINES);
-            ms.quit();
-        } catch (Exception e) {
-            fail();
-        }
+        ms = new MineSweeper(WIDTH, HEIGHT, MINES);
+        ms.quit();
                 
     }
 }
